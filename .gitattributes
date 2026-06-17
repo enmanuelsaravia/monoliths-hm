@@ -1,0 +1,16 @@
+# Archivo generado automáticamente para mapear scripts de shell a los lenguajes que ejecutan/utilizan
+# Esto ayuda a Linguist (GitHub) a mostrar los porcentajes de lenguajes correctos.
+
+hdmi.xprofile linguist-language=Emacs Lisp
+my.shell.en.sh linguist-language=Emacs Lisp
+bloat.up-volume.sh linguist-language=Emacs Lisp
+xinitrc linguist-language=Emacs Lisp
+my.shell.sh linguist-language=Emacs Lisp
+my.dialog.sh linguist-language=Emacs Lisp
+init.sh linguist-language=Emacs Lisp
+bloat.raise-volume.sh linguist-language=Emacs Lisp
+my.shell.de.sh linguist-language=Emacs Lisp
+bloat.lower-volume.sh linguist-language=Emacs Lisp
+bloat.my-lxdm-startup-helper.sh linguist-language=Emacs Lisp
+bloat.my-lxdm-startup-helper.old.sh linguist-language=Emacs Lisp
+bloat.actual-volume.sh linguist-language=Emacs Lisp
