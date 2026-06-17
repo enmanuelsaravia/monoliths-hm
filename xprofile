@@ -1,0 +1,45 @@
+#!/bin/dash
+
+# Decidir que modo de pantalla mostrar
+if xrandr | grep -q " DP-1 connected" ||
+	xrandr | grep -q "DP-2 connected" ||
+	xrandr | grep -q "HDMI-1 connected"; then
+    if echo -n $(cat $HOME/.screen_size.txt) | grep -q '1360x768'; then
+	echo -n '832x624' > $HOME/.screen_size.txt
+	sleep 0.1
+	# Por defecto ejecutar el usuario para ver peliculas
+	( sleep 1.4 && dash $HOME/.pelicula.sh ) &
+	sleep 0.1
+	xrandr --output DP-1 --gamma 1:0.9:0.8 --brightness 0.9 || true
+	sleep 0.1
+	xrandr --output DP-2 --gamma 1:0.9:0.8 --brightness 0.9 || true
+	sleep 0.1
+	xrandr --output HDMI-1 --gamma 1:0.9:0.8 --brightness 0.9 || true
+	sleep 0.1
+    else
+	echo -n '1360x768' > $HOME/.screen_size.txt
+	sleep 0.1
+	# Por defecto ejecutar el usuario para postular a trabajos
+	( sleep 1.4 && dash $HOME/.trabajo.sh ) &
+    fi
+fi
+# Configurar DP-1 si está conectado y apagar eDP-1
+( sleep 0.5 && xrandr | grep -q "DP-1 connected" && ( xrandr --output DP-1 --mode $(cat $HOME/.screen_size.txt) --auto 2>/dev/null && xrandr --output eDP-1 --off ) ) &
+# Configurar DP-2 si está conectado y apagar eDP-1
+( sleep 0.6 && xrandr | grep -q "DP-2 connected" && ( xrandr --output DP-2 --mode $(cat $HOME/.screen_size.txt) --auto 2>/dev/null && xrandr --output eDP-1 --off ) ) &
+# Configurar HDMI-1 si está conectado y apagar eDP-1
+( sleep 0.7 && xrandr | grep -q "HDMI-1 connected" && ( xrandr --output HDMI-1 --mode $(cat $HOME/.screen_size.txt) --auto 2>/dev/null && xrandr --output eDP-1 --off ) ) &
+# Configurar mi teclado
+( sleep 4s && setxkbmap latam ) &
+# Pantalla siempre encendida
+( sleep 5s && xset s noblank && xset -dpms ) &
+# Configurar teclado su trackball con velocida adecuada
+( sleep 6s && ID=$(xinput list | grep "SONiX Perixx Trackball Keyboard Mouse" | grep -o "id=[0-9]*" | cut -d= -f2); PROPS=$(xinput list-props "$ID"); echo "$PROPS" | grep -q "libinput Accel Speed" && (xinput --set-prop "$ID" "libinput Accel Speed" -1.0; xinput --set-prop "$ID" "libinput Accel Profile Enabled" 1 0) || (xinput --set-prop "$ID" "Device Accel Constant Deceleration" --type=float 4.0; xinput --set-prop "$ID" "Device Accel Adaptive Deceleration" --type=float 4.0; xinput --set-prop "$ID" "Device Accel Velocity Scaling" --type=float 4.0) ) &
+# Apagar la luz de la antena tp-link por defecto
+( sleep 1.1 && echo 0 | doas tee /sys/class/leds/ath9k_htc-phy1/brightness || echo 0 | doas tee /sys/class/leds/ath9k_htc-phy0/brightness) &
+# Acelerar las teclas para mantener precionado y realizar mas tipeos por segundo
+( sleep 1.2 && xset r rate 150 110 ) &
+# Cursor
+( sleep 6s && xsetroot -cursor_name left_ptr ) &
+# Volumen
+# ( sleep 7s & ( [ -d $HOME/monoliths-hm ] && dash $HOME/monoliths-hm/bloat.up-volume.sh ) )

@@ -1,0 +1,8 @@
+#!/bin/dash
+( sleep 0.2s && doas service sndiod start )
+( sleep 0.4s && doas sndiod -f rsnd/0,3 )
+( sleep 0.6s && echo $(amixer scontrols) > $HOME/.amixer_scontrols
+( sleep 0.8s && emacs --batch -Q --eval="(progn (find-file \"$HOME/.amixer_scontrols\") (setq last-kbd-macro (kbd \"M-d M-d M-d C-d C-d M-f C-k C-x C-s\")) (call-last-kbd-macro) (save-buffers-kill-terminal 'silently))" ) &
+( sleep 1.0s && amixer sset "$(cat $HOME/.amixer_scontrols)" %100 ) &
+( sleep 1.2s && xset s noblank && xset -dpms ) &
+( sleep 1.4s && setxkbmap latam ) &
