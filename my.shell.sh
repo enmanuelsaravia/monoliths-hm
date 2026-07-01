@@ -91,6 +91,7 @@ if [ -z "$PARAM" ]; then
     echo '82) Ver_Log - Ver log del jira'
     echo '83) Google_Chrome_No_Inhibit - Mantener tty encendida'
     echo '84) Firefox_Tmp - Firefox tmp'
+    echo '85) Bluetooth - Blueman Manager'
     echo ''
 fi
 
@@ -512,27 +513,27 @@ case "$USER_INPUT" in
 
 	if [ -n "$TEMP_BACKUP" ]; then
 	    # Modo Restauración: Regresar al original
-	    rm -f "$HOME/.xbindkeys"
-	    mv "$TEMP_BACKUP" "$HOME/.xbindkeys"
+	    rm -f "$HOME/.xbindkeysrc"
+	    mv "$TEMP_BACKUP" "$HOME/.xbindkeysrc"
 	    killall xbindkeys 2>/dev/null
 	    xbindkeys
 	    echo "Configuración original de xbindkeys restaurada."
 	else
 	    # Modo Activación: Crear configuración temporal
 	    TIMESTAMP=$(date +%s)
-	    if [ -f "$HOME/.xbindkeys" ]; then
-		mv "$HOME/.xbindkeys" "$HOME/.xbindkeys.$TIMESTAMP.tmp"
+	    if [ -f "$HOME/.xbindkeysrc" ]; then
+		mv "$HOME/.xbindkeysrc" "$HOME/.xbindkeys.$TIMESTAMP.tmp"
 		echo "Respaldo creado: .xbindkeys.$TIMESTAMP.tmp"
 	    fi
 
 	    # Crear nueva config con Alt+1 (OFF) y Alt+2 (ON)
-	    cat <<EOF > "$HOME/.xbindkeys"
+	    cat <<EOF > "$HOME/.xbindkeysrc"
 # Touchpad Switcher Mode
 "xinput disable 'ELAN0791:00 04F3:30FD Touchpad'"
-    alt + 1
+  Alt+1
 
 "xinput enable 'ELAN0791:00 04F3:30FD Touchpad'"
-    alt + 2
+  Alt+2
 EOF
 	    killall xbindkeys 2>/dev/null
 	    xbindkeys -f "$HOME/.xbindkeys"
@@ -637,6 +638,9 @@ EOF
     84|Firefox_Tmp)
 	mkdir -p $HOME/.firefox-new-profile-$(date +%s) && firefox --profile $HOME/.firefox-new-profile-$(date +%s) &
 	# folder="$HOME/.firefox-new-profile-$(date +%s)"; mkdir -p "$HOME/.$folder" && google-chrome-stable --user-data-dir="$HOME/.$folder"
+	;;
+    85|Bluetooth)
+        blueman-applet & sleep 1 && blueman-manager &
 	;;
     *)
 	echo 'Opción no mapeada.'

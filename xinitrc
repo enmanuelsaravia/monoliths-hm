@@ -39,6 +39,7 @@ if [ "$CURRENT_TTY" = "/dev/tty1" ]; then
     # MIXEDCOLOR=''
     while true; do sleep 1; emacs $MIXEDCOLOR -mm --debug-init; done &
     while true; do dash ~/monoliths-llm/a-llm-yad.sh; sleep 0.1; done &
+    sleep 2
     while true; do
         if ! wmctrl -lx | awk '{print $3}' | grep -qi 'google-chrome'; then
             google-chrome-stable https://web.whatsapp.com https://mail.google.com/mail/u/1 &
